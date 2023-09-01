@@ -9,15 +9,15 @@ const ProductDetailPage = () => {
   const params = useParams();
 
   const [products, setProducts] = React.useState<Product>();
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const getOneProduct = async () => {
       try {
+        setLoading(true);
         const { data } = await axios.get<Product>(`https://dummyjson.com/products/${params.slug}`);
         setProducts(data);
-        console.log(params.id);
-
-        console.log(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -25,8 +25,12 @@ const ProductDetailPage = () => {
     getOneProduct();
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (!products) {
-    return <div>Товар не найден.</div>;
+    return <div>Товар не найден</div>;
   }
 
   return (

@@ -17,27 +17,33 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <Link href={`/product/${product.id}`}>
-      <Card onClick={() => handleCardClick}>
-        <CardMedia component="img" height="140" image={product.thumbnail} alt={product.title} />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
-            {product.title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {product.description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <IconButton aria-label="Add to Cart">
-            <AddShoppingCart />
-          </IconButton>
-          <IconButton aria-label="Add to Favorites">
-            <Favorite />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </Link>
+    <Card>
+      <Link href={`/product/${product.id}`}>
+        <CardMedia
+          onClick={() => handleCardClick}
+          component="img"
+          height="140"
+          image={product.thumbnail}
+          alt={product.title}
+        />
+      </Link>
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="div">
+          {product.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {product.description}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <IconButton aria-label="Add to Cart">
+          <AddShoppingCart />
+        </IconButton>
+        <IconButton aria-label="Add to Favorites">
+          <Favorite />
+        </IconButton>
+      </CardActions>
+    </Card>
   );
 };
 
