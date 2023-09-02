@@ -22,11 +22,15 @@ export default function Home() {
 
     fetchProducts();
   }, []);
+
+  const handleProductSubmitSuccess = (data: Product) => {
+    setProducts((prevProducts) => [...prevProducts, data]);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Test</h1>
       <Container>
-        <ProductForm></ProductForm>
+        <ProductForm onSubmitSuccess={handleProductSubmitSuccess}></ProductForm>
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>

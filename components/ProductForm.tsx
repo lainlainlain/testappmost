@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Grid, Container, Paper } from '@mui/material';
+import { Product } from '@/types';
 
 const initialFormData = {
   id: 1,
@@ -18,7 +19,11 @@ const initialFormData = {
   images: '',
 };
 
-const ProductForm: React.FC = () => {
+interface ProductFormProps {
+  onSubmitSuccess: (data: Product) => void; // Замените `any` на тип данных, который вы ожидаете получить
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmitSuccess }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -37,10 +42,14 @@ const ProductForm: React.FC = () => {
 
     try {
       // Отправляем POST-запрос на API
-      await axios.post('https://dummyjson.com/products/add', formData);
+      const { data } = await axios.post('https://dummyjson.com/products/add', formData);
+
+      console.log(data);
 
       // Успешно отправлено
       alert('Продукт успешно добавлен.');
+
+      onSubmitSuccess(data);
 
       // Сброс формы
       setFormData(initialFormData);
