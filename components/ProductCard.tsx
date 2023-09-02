@@ -1,14 +1,41 @@
-import React from 'react';
-import { Card, CardMedia, CardContent, Typography, CardActions, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  IconButton,
+  Button,
+  TextField,
+} from '@mui/material';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import { Product } from '@/types';
 import Link from 'next/link';
+import axios from 'axios';
 
 interface ProductCardProps {
   product: Product;
+  onTextChange: (id: number, newText: string) => void; // Обработчик для изменения текста
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange }) => {
+  const [newText, setNewText] = useState(product.title);
+  const [isVisible, setVisible] = useState(false);
+
+  const handleTextChange = async () => {
+    try {
+      const response = await axios.patch<Product>(`https://dummyjson.com/products/${product.id}`, {
+        title: newText,
+      });
+
+      // Вызываем колбэк для передачи измененных данных в верхний компонент
+      onTextChange(product.id, response.data.title);
+    } catch (error) {
+      console.error('Error updating text:', error);
+    }
+  };
+
   const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     // Предотвращаем переход по ссылке
     e.preventDefault();
@@ -28,6 +55,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         />
       </Link>
       <CardContent>
+        <Button onClick={() => setVisible(!isVisible)}>Change name</Button>
+        {isVisible && (
+          <Typography gutterBottom variant="h6" component="div">
+            <TextField type="text" value={newText} onChange={(e) => setNewText(e.target.value)} />
+            <IconButton onClick={handleTextChange}>Save</IconButton>
+          </Typography>
+        )}
         <Typography gutterBottom variant="h6" component="div">
           {product.title}
         </Typography>

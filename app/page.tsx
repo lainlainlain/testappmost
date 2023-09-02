@@ -27,6 +27,16 @@ export default function Home() {
     setProducts((prevProducts) => [...prevProducts, data]);
   };
 
+  const handleTextChange = (productId: number, newText: string) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) => {
+        return product.id === productId ? { ...product, title: newText } : product;
+      }),
+    );
+  };
+
+  console.log(products[0]);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <Container>
@@ -34,7 +44,7 @@ export default function Home() {
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-              <ProductCard product={product} />
+              <ProductCard product={product} onTextChange={handleTextChange} />
             </Grid>
           ))}
         </Grid>
