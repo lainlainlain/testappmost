@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, TextField, Button, Paper, Box, Snackbar } from '@mui/material'; // Добавлен Box
 import axios from 'axios'; // Импортируем axios
+import { useDispatch } from 'react-redux';
+import { login } from '@/redux/authSlice';
 
 const modalStyle = {
   position: 'absolute',
@@ -29,6 +31,8 @@ const LoginForm: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Состояние для успешной авторизации
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -48,6 +52,15 @@ const LoginForm: React.FC = () => {
 
       // Открываем Snackbar для уведомления
       setSnackbarOpen(true);
+
+      localStorage.setItem('token', response.data.token);
+
+      dispatch(
+        login({
+          token: response.data.token,
+          user: response.data,
+        }),
+      );
     } catch (err) {
       // Обрабатываем ошибку
       setError('Ошибка входа. Проверьте имя пользователя и пароль.');

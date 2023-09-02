@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Modal } from '@mui/material';
 import LoginForm from './LoginForm';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState('');
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const handleLoginClick = () => {
     setOpen(true);
@@ -24,9 +26,16 @@ const Header: React.FC = () => {
               My app
             </Typography>
           </Link>
-          <Button color="inherit" onClick={handleLoginClick}>
-            Логин
-          </Button>
+          {user ? (
+            <Link href={'/user'}>
+              {' '}
+              <Button color="inherit">Профиль</Button>
+            </Link>
+          ) : (
+            <Button color="inherit" onClick={handleLoginClick}>
+              Логин
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
