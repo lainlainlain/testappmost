@@ -6,20 +6,21 @@ import axios from 'axios';
 import React from 'react';
 
 const ProductDetailPage = () => {
-  const params = useParams();
-
   const [products, setProducts] = React.useState<Product>();
   const [loading, setLoading] = React.useState(false);
+
+  const params = useParams();
 
   React.useEffect(() => {
     const getOneProduct = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get<Product>(`https://dummyjson.com/products/${params.slug}`);
-        setProducts(data);
+        const response = await axios.get<Product>(`https://dummyjson.com/products/${params.slug}`);
+        setProducts(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
+        setLoading(false);
       }
     };
     getOneProduct();
