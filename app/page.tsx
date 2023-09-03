@@ -35,6 +35,13 @@ export default function Home() {
     );
   };
 
+  const handleDelete = (productId: number) => {
+    // Удаляем продукт из стейта
+    if (confirm('Вы действительно хотите удалить товар?')) {
+      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
+    }
+  };
+
   console.log(products[0]);
 
   return (
@@ -44,7 +51,11 @@ export default function Home() {
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-              <ProductCard product={product} onTextChange={handleTextChange} />
+              <ProductCard
+                product={product}
+                onTextChange={handleTextChange}
+                onDelete={handleDelete}
+              />
             </Grid>
           ))}
         </Grid>

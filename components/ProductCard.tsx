@@ -17,9 +17,10 @@ import axios from 'axios';
 interface ProductCardProps {
   product: Product;
   onTextChange: (id: number, newText: string) => void; // Обработчик для изменения текста
+  onDelete: (id: number) => void; // Обработчик для удаления продукта
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDelete }) => {
   const [newText, setNewText] = useState(product.title);
   const [isVisible, setVisible] = useState(false);
 
@@ -43,6 +44,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange }) => {
     window.location.href = `/product/${product.id}`;
   };
 
+  const handleDeleteClick = async () => {
+    try {
+      const response = await axios.delete<{ isDeleted: boolean }>(
+        `https://dummyjson.com/products/${product.id}`,
+      );
+
+      // Проверяем, удален ли продукт
+      if (response.data.isDeleted) {
+        // Вызываем колбэк для удаления продукта из верхнего компонента
+        onDelete(product.id);
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
   return (
     <Card>
       <Link href={`/product/${product.id}`}>
@@ -75,6 +91,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange }) => {
         </IconButton>
         <IconButton aria-label="Add to Favorites">
           <Favorite />
+        </IconButton>
+        <IconButton
+          size="small"
+          aria-label="Delete"
+          onClick={handleDeleteClick} // Добавляем обработчик удаления
+        >
+          Delete
         </IconButton>
       </CardActions>
     </Card>
