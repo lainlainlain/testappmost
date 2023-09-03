@@ -9,4 +9,5 @@ export interface Product {
   rating: number;
   stock: number;
   thumbnail: string;
+  brand: string;
 }

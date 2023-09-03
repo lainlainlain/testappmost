@@ -23,6 +23,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDelete }) => {
   const [newText, setNewText] = useState(product.title);
   const [isVisible, setVisible] = useState(false);
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
 
   const handleTextChange = async () => {
     try {
@@ -47,20 +48,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
   };
 
   const handleDeleteClick = async () => {
+    setButtonDisabled(true);
+
     try {
       const response = await axios.delete<{ isDeleted: boolean }>(
         `https://dummyjson.com/products/${product.id}`,
       );
 
-      // Проверяем, удален ли продукт
-      if (response.data.isDeleted) {
-        // Вызываем колбэк для удаления продукта из верхнего компонента
-        if (onDelete) {
-          onDelete(product.id);
-        }
+      if (response.data.isDeleted && onDelete) {
+        onDelete(product.id);
       }
     } catch (error) {
       console.error('Error deleting product:', error);
+    } finally {
+      setButtonDisabled(false);
     }
   };
   return (
@@ -103,6 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         </IconButton>
         {onDelete && (
           <IconButton
+            disabled={isButtonDisabled}
             size="small"
             aria-label="Delete"
             onClick={handleDeleteClick} // Добавляем обработчик удаления

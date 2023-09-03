@@ -38,7 +38,7 @@ const SearchPage: React.FC = () => {
         <Button
           sx={{ marginLeft: '15px' }}
           variant="contained"
-          color="primary"
+          color="inherit"
           onClick={handleSearch}>
           Поиск
         </Button>

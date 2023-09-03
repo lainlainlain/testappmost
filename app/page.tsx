@@ -79,6 +79,7 @@ export default function Home() {
 
   const handleDelete = (productId: number) => {
     // Удаляем продукт из стейта
+
     if (confirm('Вы действительно хотите удалить товар?')) {
       setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
     }

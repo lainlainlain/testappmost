@@ -44,19 +44,29 @@ const ProductDetailPage = () => {
           <Typography variant="h4" gutterBottom>
             {products.title}
           </Typography>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h4" gutterBottom>
             Цена: ${products.price.toFixed(2)}
           </Typography>
+          <Typography variant="h6" gutterBottom>
+            Скидка по акции:{products.discountPercentage}%
+          </Typography>
           <Typography variant="body1" paragraph>
-            {products.description}
+            Описание: {products.description}
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Категория: {products.category}
           </Typography>
           <Typography variant="body2" paragraph>
             Рейтинг: {products.rating}
           </Typography>
           <Typography variant="body2" paragraph>
+            Бренд: {products.brand}
+          </Typography>
+
+          <Typography variant="body2" paragraph>
             В наличии: {products.stock} шт.
           </Typography>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="inherit">
             Добавить в корзину
           </Button>
         </Grid>
