@@ -13,6 +13,8 @@ import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import { Product } from '@/types';
 import Link from 'next/link';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/redux/cartSlice';
 
 interface ProductCardProps {
   product: Product;
@@ -24,6 +26,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
   const [newText, setNewText] = useState(product.title);
   const [isVisible, setVisible] = useState(false);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleTextChange = async () => {
     try {
@@ -64,6 +68,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
       setButtonDisabled(false);
     }
   };
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
+
   return (
     <Card>
       <Link href={`/product/${product.id}`}>
@@ -96,7 +105,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         </Typography>
       </CardContent>
       <CardActions>
-        <IconButton aria-label="Add to Cart">
+        <IconButton onClick={handleAddToCart} aria-label="Add to Cart">
           <AddShoppingCart />
         </IconButton>
         <IconButton aria-label="Add to Favorites">
