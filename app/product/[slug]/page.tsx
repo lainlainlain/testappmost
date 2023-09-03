@@ -4,10 +4,13 @@ import { Container, Grid, Typography, Button } from '@mui/material';
 import { Product } from '@/types';
 import axios from 'axios';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/redux/cartSlice';
 
 const ProductDetailPage = () => {
-  const [products, setProducts] = React.useState<Product>();
+  const [product, setProduct] = React.useState<Product>();
   const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch();
 
   const params = useParams();
 
@@ -16,7 +19,7 @@ const ProductDetailPage = () => {
       try {
         setLoading(true);
         const response = await axios.get<Product>(`https://dummyjson.com/products/${params.slug}`);
-        setProducts(response.data);
+        setProduct(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -30,43 +33,47 @@ const ProductDetailPage = () => {
     return <div>Loading...</div>;
   }
 
-  if (!products) {
+  if (!product) {
     return <div>Товар не найден</div>;
   }
+
+  const handleAddToCart = (product: Product) => {
+    dispatch(addToCart(product));
+  };
 
   return (
     <Container sx={{ margin: '150px' }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <img src={products.images[0]} alt={products.title} style={{ maxWidth: '100%' }} />
+          <img src={product.images[0]} alt={product.title} style={{ maxWidth: '100%' }} />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="h4" gutterBottom>
-            {products.title}
+            {product.title}
           </Typography>
           <Typography variant="h4" gutterBottom>
-            Цена: ${products.price.toFixed(2)}
+            Цена: ${product.price.toFixed(2)}
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Скидка по акции:{products.discountPercentage}%
+            Скидка по акции:{product.discountPercentage}%
           </Typography>
           <Typography variant="body1" paragraph>
-            Описание: {products.description}
+            Описание: {product.description}
           </Typography>
           <Typography variant="body1" paragraph>
-            Категория: {products.category}
+            Категория: {product.category}
           </Typography>
           <Typography variant="body2" paragraph>
-            Рейтинг: {products.rating}
+            Рейтинг: {product.rating}
           </Typography>
           <Typography variant="body2" paragraph>
-            Бренд: {products.brand}
+            Бренд: {product.brand}
           </Typography>
 
           <Typography variant="body2" paragraph>
-            В наличии: {products.stock} шт.
+            В наличии: {product.stock} шт.
           </Typography>
-          <Button variant="contained" color="inherit">
+          <Button onClick={() => handleAddToCart(product)} variant="contained" color="inherit">
             Добавить в корзину
           </Button>
         </Grid>
