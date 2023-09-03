@@ -35,7 +35,7 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <Container>
+    <Container sx={{ margin: '150px' }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <img src={products.images[0]} alt={products.title} style={{ maxWidth: '100%' }} />

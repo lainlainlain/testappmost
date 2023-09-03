@@ -69,9 +69,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         <CardMedia
           onClick={() => handleCardClick}
           component="img"
-          height="140"
           image={product.thumbnail}
           alt={product.title}
+          sx={{
+            height: '150px',
+          }}
         />
       </Link>
       <CardContent>
@@ -87,6 +89,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {product.description}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <b> Price: ${product.price}</b>
         </Typography>
       </CardContent>
       <CardActions>

@@ -45,11 +45,13 @@ const SearchPage: React.FC = () => {
       </div>
 
       <Grid container spacing={3}>
-        {searchResults.map((product) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
+        {searchResults.length !== 0
+          ? searchResults.map((product) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                <ProductCard product={product} />
+              </Grid>
+            ))
+          : 'Товар не найден'}
       </Grid>
     </Container>
   );

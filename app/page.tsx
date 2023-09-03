@@ -1,17 +1,20 @@
 'use client';
-import React from 'react';
-import { Container, Grid, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Grid, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import ProductCard from '@/components/ProductCard';
 import axios from 'axios';
 import { Product } from '@/types';
 import ProductForm from '@/components/ProductForm';
 import { Categories } from '@/components/Categories';
+import { ArrowDropDown } from '@mui/icons-material';
 
 export default function Home() {
   const [products, setProducts] = React.useState<Product[]>([]);
   const [categories, setCategories] = React.useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const [all, setAll] = React.useState(false);
+  const [sortDirection, setSortDirection] = React.useState('');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   React.useEffect(() => {
     const fetchCategories = async () => {
@@ -86,7 +89,27 @@ export default function Home() {
     // Дополнительные действия, которые вы хотите выполнить при выборе категории
   };
 
-  // console.log(products);
+  const handleSort = (direction: 'asc' | 'desc') => {
+    const sorted = [...products];
+
+    if (direction === 'asc') {
+      sorted.sort((a, b) => a.price - b.price);
+      setSortDirection('asc');
+    } else {
+      sorted.sort((a, b) => b.price - a.price);
+      setSortDirection('desc');
+    }
+
+    setProducts(sorted);
+    setAnchorEl(null);
+  };
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <main className="flex min-h-screen items-center pt-24">
@@ -110,6 +133,23 @@ export default function Home() {
             {!selectedCategory && (
               <ProductForm onSubmitSuccess={handleProductSubmitSuccess}></ProductForm>
             )}
+            <div className="flex justify-end">
+              <IconButton
+                size="small"
+                aria-controls="sort-menu"
+                aria-haspopup="true"
+                onClick={handleClick}>
+                Сортировать <ArrowDropDown />
+              </IconButton>
+              <Menu
+                id="sort-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                <MenuItem onClick={() => handleSort('asc')}>По возрастанию цены</MenuItem>
+                <MenuItem onClick={() => handleSort('desc')}>По убыванию цены</MenuItem>
+              </Menu>
+            </div>
             <Grid container spacing={3}>
               {products.map((product) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
