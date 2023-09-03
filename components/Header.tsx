@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, Modal, IconButton } from '@mui/material';
 import LoginForm from './LoginForm';
