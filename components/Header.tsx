@@ -19,23 +19,28 @@ const Header: React.FC = () => {
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Link href="/">
             <Typography variant="h6" component="div">
               My app
             </Typography>
           </Link>
-          {user ? (
-            <Link href={'/user'}>
-              {' '}
-              <Button color="inherit">Профиль</Button>
+          <div>
+            <Link href="/search">
+              <Button color="inherit">Поиск</Button>
             </Link>
-          ) : (
-            <Button color="inherit" onClick={handleLoginClick}>
-              Логин
-            </Button>
-          )}
+            {user ? (
+              <Link href={'/user'}>
+                {' '}
+                <Button color="inherit">Профиль</Button>
+              </Link>
+            ) : (
+              <Button color="inherit" onClick={handleLoginClick}>
+                Логин
+              </Button>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
 

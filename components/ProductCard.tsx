@@ -16,8 +16,8 @@ import axios from 'axios';
 
 interface ProductCardProps {
   product: Product;
-  onTextChange: (id: number, newText: string) => void; // Обработчик для изменения текста
-  onDelete: (id: number) => void; // Обработчик для удаления продукта
+  onTextChange?: (id: number, newText: string) => void; // Обработчик для изменения текста
+  onDelete?: (id: number) => void; // Обработчик для удаления продукта
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDelete }) => {
@@ -31,7 +31,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
       });
 
       // Вызываем колбэк для передачи измененных данных в верхний компонент
-      onTextChange(product.id, response.data.title);
+      if (onTextChange) {
+        onTextChange(product.id, response.data.title);
+      }
     } catch (error) {
       console.error('Error updating text:', error);
     }
@@ -53,7 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
       // Проверяем, удален ли продукт
       if (response.data.isDeleted) {
         // Вызываем колбэк для удаления продукта из верхнего компонента
-        onDelete(product.id);
+        if (onDelete) {
+          onDelete(product.id);
+        }
       }
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -71,7 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         />
       </Link>
       <CardContent>
-        <Button onClick={() => setVisible(!isVisible)}>Change name</Button>
+        {onTextChange && <Button onClick={() => setVisible(!isVisible)}>Change name</Button>}
         {isVisible && (
           <Typography gutterBottom variant="h6" component="div">
             <TextField type="text" value={newText} onChange={(e) => setNewText(e.target.value)} />
@@ -92,13 +96,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onTextChange, onDele
         <IconButton aria-label="Add to Favorites">
           <Favorite />
         </IconButton>
-        <IconButton
-          size="small"
-          aria-label="Delete"
-          onClick={handleDeleteClick} // Добавляем обработчик удаления
-        >
-          Delete
-        </IconButton>
+        {onDelete && (
+          <IconButton
+            size="small"
+            aria-label="Delete"
+            onClick={handleDeleteClick} // Добавляем обработчик удаления
+          >
+            Delete
+          </IconButton>
+        )}
       </CardActions>
     </Card>
   );
